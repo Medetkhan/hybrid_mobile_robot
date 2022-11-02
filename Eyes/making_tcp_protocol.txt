@@ -1,0 +1,27 @@
+https://siytek.com/raspberry-pi-rtsp-to-home-assistant/
+
+
+
+
+run it on RPi:
+
+v4l2rtspserver -W 640 -H 480 -F 15 -P 8554 /dev/video0
+
+Run it on PC:
+
+vlc
+
+then in the network settings put following:
+
+rtsp://<raspberry-pi-ip>:8554/unicast
+
+
+https://qengineering.eu/install-gstreamer-1.18-on-raspberry-pi-4.html
+
+https://github.com/cxphong/Build-gstreamer-Raspberry-Pi-3
+
+https://pyshine.com/How-to-configure-Raspberry-Pi-in-Ad-hoc-wifi-mode/
+
+https://forums.developer.nvidia.com/t/rtsp-gst-launch-using-nano/112618
+
+https://www.arducam.com/docs/cameras-for-raspberry-pi/native-raspberry-pi-cameras/native-camera-commands-raspistillraspivid/
