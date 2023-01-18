@@ -94,10 +94,10 @@ def poly(in_angle, fin_angle, t):
 def move_many(arr, t):
     a= []
     ts = 0
-    for x in arr:
-        if len(x) != 3:
-            print("WRONG ARRAY")
-            return -1
+#     for x in arr:
+#         if len(x) != 3:
+#             print("WRONG ARRAY")
+#             return -1
     for x in arr:
         a.append(poly(x[0], x[1], t))
     t0 = time.time()
@@ -109,27 +109,21 @@ def move_many(arr, t):
             if (t1 - t0 > t):
                 k = 1
             t_diff  = t1 - t0
-            pos.append(int(a[x][0] + a[x][1] * t_diff + a[x][2] * t_diff ** 2 + a[x][3] * t_diff ** 3 + a[x][4] * t_diff ** 4 + a[x][5] * t_diff ** 5)*2789)
+            pos.append(int((a[x][0] + a[x][1] * t_diff + a[x][2] * t_diff ** 2 + a[x][3] * t_diff ** 3 + a[x][4] * t_diff ** 4 + a[x][5] * t_diff ** 5)*2789))
             #poss = int(pos * 2789)
         if k == 1:
             break
         for x in range(len(arr)):
             param_goal_position = [DXL_LOBYTE(DXL_LOWORD(pos[x])), DXL_HIBYTE(DXL_LOWORD(pos[x])), DXL_LOBYTE(DXL_HIWORD(pos[x])), DXL_HIBYTE(DXL_HIWORD(pos[x]))]
             dxl_addparam_result = groupSyncWrite.addParam(DXL_ID[arr[x][-1]], param_goal_position)
-            
-            if dxl_addparam_result != True:
-                print("[ID:%03d] groupSyncWrite addparam failed" % DXL_ID[arr[x][-1]])
-                quit()
             dxl_comm_result = groupSyncWrite.txPacket()
-        #if dxl_comm_result != COMM_SUCCESS:
-            #print("%s" % packetHandler.getTxRxResult(dxl_comm_result))
 
-        # Clear syncwrite parameter storage
         groupSyncWrite.clearParam()
-        if (time.time() - t1 < 0.0074):
-            ts = 0.0075 - time.time() + t1
-            time.sleep(ts)
-
+        try:
+            time.sleep(0.008 - time.time() + t1)
+        except:
+            print(-1)
+        
 def move_poly(start, end, t, m_id):
     a = poly(start, end, t)
     t0 = time.time()
@@ -154,8 +148,10 @@ def move_poly(start, end, t, m_id):
 
         # Clear syncwrite parameter storage
         groupSyncWrite.clearParam()
-        if (time.time() - t1 < 0.002):
+        try:
             time.sleep(0.002 - time.time() + t1)
+        except:
+            pass
         #print(t_diff)
     print(p, len(p))
 def check(pos):
@@ -275,25 +271,57 @@ if dxl_addparam_result != True:
     print("[ID:%03d] groupSyncRead addparam failed" % DXL2_ID)
     quit()
 '''    #0   1  2  3  4  5
-pos = [[-90, -90, 90, -60, -179, 60],
-       [-90, -90, 90, -60, -179, 60],
+pos = [[-120, -60, 179, -179, -179, 179],
+       [-120, -60, 60, -120, -30, 135],
        [0, -90, 120, 0, 0, 179],
        [0, -90, 120, 0, 0, 179]]
+
+
+##right leg:
 pos_poly = [[-120, -60, 1],
-            [90, 0, 2],
-            [-90, 100, 5]]
+            [179, 60, 2],
+            [60, 179, 5]]
 
 pos_poly2 = [[-60, -120, 1],
-            [0, 90, 2],
-             [100, -90, 5]]
+            [60, 179, 2],
+             [179, 60, 5]]
 
-pos_poly3 = [[-60, -120, 0],
-            [90, -100, 3],
-            [-140, -50, 4]]
 
-pos_poly4 = [[-120, -60, 0],
-            [-100, 90, 3],
-             [-50, -140, 4]]
+
+##left leg:
+pos_poly3 = [[-120, -60, 0],
+             [-179, -60, 3],
+             [-60, -179, 4]]
+
+pos_poly4 = [[-60, -120, 0],
+             [-60, -179, 3],
+             [-179, -60, 4]]
+
+##transition wheeled to legged mode:
+#right leg:
+pos_poly5 = [[-60, -40, 1],
+            [60, 179, 2],
+             [179, 60, 5]]
+
+pos_poly6 = [[-40, -60, 1],
+            [179, 60, 2],
+            [60, 179, 5]]
+
+R_trans1 = [[-60, 0, 1],
+          [179, 0, 2],
+          [179, -60, 5]]
+
+R_trans2 = [[0, -60, 1],
+          [0, 179, 2],
+          [-60, 179, 5]]
+
+L_trans1 =[[-120, -179, 0],
+         [-179, 60, 3],
+         [-179, 0, 4]]
+
+L_trans2 = [[-179, -120, 0],
+          [60, -179, 3],
+          [0, -179, 4]]
 
 num = 0
 """while 1:
@@ -303,16 +331,85 @@ num = 0
     move(pos[num%2])
     num += 1
 """
-#move(pos[0])
+
+# while 1:
+#       move(pos[0])
+#      move(pos[1])
 #time.sleep(2)
-#for x in range (4):
-#    move_poly(-60, -120, 2, 1)
-#    move_poly(-120, -60, 2, 1)
-for x in range (4):
-   move_many(pos_poly2, .8)
-   move_many(pos_poly, .8)
-   move_many(pos_poly4, .8)
-   move_many(pos_poly3, .8)
+#for x in range (1):
+    #move_poly(-60, 30, 3, 1)
+
+
+time.sleep(3)
+move_many(R_trans2, 2)
+time.sleep(3)
+    #move_poly(30, -60, 3, 1)
+move_many(L_trans2, 2)
+    #time.sleep(1.5)
+    
+    ##left leg
+    #move_many(L_trans3, 2)
+    #time.sleep(10)
+    #move_many(L_trans4, 2)
+    #time.sleep(1.5)
+    
+#the right leg
+
+    ##move_poly(135, 45, 2 ,5) ##up-down
+    ##move_poly(45, 135, 2, 5)
+
+    #move_poly(60, 140, 2, 2) ##back-forward 60-back/ 140 - forward
+    #move_poly(140, 60, 2, 2)
+
+
+
+#left leg:
+      
+    #move_poly(-50, -150, 2, 4) ##back-forward (updated values 12/01/23)
+    #move_poly(-150, -50, 2, 4)
+
+    #move_poly(-60, 40, 2, 3) ##up - 40/down
+    #move_poly(40, -60, 2, 3)
+
+    #move_poly(-120, -90, 2, 0) ## left leg: -120- backward initial position/ -90 - forward position
+    #move_poly(-60, -90, 2, 1)  ## right leg: -60 - backward initial position/-90 - moving forward 
+    #move_poly(-90, -60, 2, 1)
+
+
+#transitions of the right leg:
+    #move_poly(-60, -30, 3, 1)
+    #move_poly(40, 30, 3, 5)
+    #move_poly(30, 179, 3, 5) ##179 relaxed string 30 - broke cable
+    #move_poly(169, 179, 3, 5)
+    #move_poly(129, 119, 3, 2) ##tensioned position(almost maximum up) stays like that
+    #move_poly(159, 179, 3, 2)
+    
+    ##16jan:
+    #move_poly(-179, -10, 2, 4)
+    #move_poly(-10, -179, 2, 4)
+    #move_poly(179, 0, 2, 2)
+    #move_poly(0, 179, 2, 2)
+    #move_poly(-179, 0, 2, 3)
+    #move_poly(0, -179, 2, 3)
+    #move_poly(-120, -180, 2, 0)
+    #move_poly(-180, -120, 2, 0)
+    
+#     move_poly(-60, -120, .8, 0)
+#     move_poly(90, -100, .8, 3)
+
+#     move_poly(-100, 100, .8, 3)
+#     move_many(pos_poly6,.8)
+#     move_poly(100, -100, .8, 3)
+#     move_many(pos_poly5, .8)
+    
+#       move_poly(-140,-50,.8, 4)
+    
+    
+#for x in range (1):
+    #move_many(pos_poly6, 3)
+    #move_many(pos_poly, 1.5)
+    #move_many(pos_poly4, 1.5)
+    #move_many(pos_poly3, 1.5)
 #while 1:
     
  #   move_poly(-120, -60, 1, 1)
