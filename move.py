@@ -271,169 +271,137 @@ if dxl_addparam_result != True:
     print("[ID:%03d] groupSyncRead addparam failed" % DXL2_ID)
     quit()
 '''    #0   1  2  3  4  5
-pos = [[-120, -60, 179, -179, -179, 179],
-       [-120, -60, 60, -120, -30, 135],
+pos = [[-60, -120, 179, -179, -179, 179],
+       [-179, 0, 30, 60, -30, -60],
        [0, -90, 120, 0, 0, 179],
        [0, -90, 120, 0, 0, 179]]
 
+R_trans1 = [[-120, 0, 1],
+          [179, -30, 2],
+          [179, -60, 5]]
 
-##right leg:
-pos_poly = [[-120, -60, 1],
-            [179, 60, 2],
-            [60, 179, 5]]
-
-pos_poly2 = [[-60, -120, 1],
-            [60, 179, 2],
-             [179, 60, 5]]
+R_trans2 = [[0, -120, 1],
+          [-30, 179, 2],
+          [-60, 179, 5]]
 
 
 
-##left leg:
-pos_poly3 = [[-120, -60, 0],
-             [-179, -60, 3],
-             [-60, -179, 4]]
+L_trans1 =[[-60, -179, 0],
+         [-179, 60, 3],
+         [-179, 60, 4]]
 
-pos_poly4 = [[-60, -120, 0],
-             [-60, -179, 3],
-             [-179, -60, 4]]
+L_trans2 = [[-179, -60, 0],
+          [60, -179, 3],
+          [60, -179, 4]]
 
-##transition wheeled to legged mode:
-#right leg:
-pos_poly5 = [[-60, -40, 1],
-            [60, 179, 2],
-             [179, 60, 5]]
 
-pos_poly6 = [[-40, -60, 1],
-            [179, 60, 2],
-            [60, 179, 5]]
 
-R_trans1 = [[-60, 0, 1],
+wheel1 = [[-179, -30, 0],
+          [0, -150, 1]]
+
+wheel2 = [[-45, -179, 0],
+          [-135, 0, 1]]
+
+leg1 = [[30, 179, 2],
+        [-30, -179, 4]]
+
+leg2 = [[179, 30, 2],
+        [-179, -30, 4]]
+
+shldr1 = [[60, -179, 3],
+          [-60, 179, 5]]
+
+shldr2 = [[-179, 60, 3],
+          [179, -60, 5]]
+fin = [[-30, -60, 0],
+       [-150, -120, 1]]
+
+
+step = [[-60, -120, 0],
+        [-120, -60, 1]]
+
+R_trans1_s = [[-120, 0, 1],
           [179, 0, 2],
           [179, -60, 5]]
 
-R_trans2 = [[0, -60, 1],
+R_trans2_s = [[0, -120, 1],
           [0, 179, 2],
           [-60, 179, 5]]
 
-L_trans1 =[[-120, -179, 0],
-         [-179, 60, 3],
-         [-179, 0, 4]]
+L_trans1_s =[[-60, -179, 0],
+         [-179, 85, 3],
+         [-179, 20, 4]]
 
-L_trans2 = [[-179, -120, 0],
-          [60, -179, 3],
-          [0, -179, 4]]
-
-num = 0
-"""while 1:
-    #pos[1] = int(200000.0*math.sin(2*math.pi*.25*time.time()))
-    # Allocate goal position value into byte array
-    print(pos[num%2])
-    move(pos[num%2])
-    num += 1
-"""
-
-# while 1:
-#       move(pos[0])
-#      move(pos[1])
-#time.sleep(2)
-#for x in range (1):
-    #move_poly(-60, 30, 3, 1)
+L_trans2_s= [[-179, -60, 0],
+          [85, -179, 3],
+          [20, -179, 4]]
 
 
-time.sleep(3)
-move_many(R_trans2, 2)
-time.sleep(3)
-    #move_poly(30, -60, 3, 1)
-move_many(L_trans2, 2)
-    #time.sleep(1.5)
-    
-    ##left leg
-    #move_many(L_trans3, 2)
-    #time.sleep(10)
-    #move_many(L_trans4, 2)
-    #time.sleep(1.5)
-    
-#the right leg
+###new transition: legged to wheeled mode
+upper_joint_up = [[179, -60, 5],
+           [-179, 85, 3]]
 
-    ##move_poly(135, 45, 2 ,5) ##up-down
-    ##move_poly(45, 135, 2, 5)
+lower_joint_up = [[179, 0, 2],
+                  [-179, 20, 4]]
 
-    #move_poly(60, 140, 2, 2) ##back-forward 60-back/ 140 - forward
-    #move_poly(140, 60, 2, 2)
+legs_to_back = [[-120, 0, 1],
+                [-60, -179, 0]]
+
+###transition from wheeled to legged mode:
+legs_to_front = [[0, -120, 1],
+                 [-179, -60, 0]]
+
+lower_joint_down = [[0, 179, 2],
+                    [20, -179, 4]]
+
+upper_joint_down = [[-60, 179, 5],
+                         [85, -179, 3]]
 
 
 
-#left leg:
-      
-    #move_poly(-50, -150, 2, 4) ##back-forward (updated values 12/01/23)
-    #move_poly(-150, -50, 2, 4)
+time.sleep(10)
+#move_many(step, 2)
+##move_many(L_trans1_s, 3)
+##time.sleep(10)
+##move_many(L_trans2_s, 3)
 
-    #move_poly(-60, 40, 2, 3) ##up - 40/down
-    #move_poly(40, -60, 2, 3)
+##move_many(R_trans1_s, 3)
+##time.sleep(10)
+##move_many(R_trans2_s, 3)
 
-    #move_poly(-120, -90, 2, 0) ## left leg: -120- backward initial position/ -90 - forward position
-    #move_poly(-60, -90, 2, 1)  ## right leg: -60 - backward initial position/-90 - moving forward 
-    #move_poly(-90, -60, 2, 1)
+move_many(upper_joint_up, 3)
+time.sleep(2)
+move_many(lower_joint_up, 3)
+time.sleep(2)
+move_many(legs_to_back, 3)
+
+time.sleep(10)
+move_many(legs_to_front, 3)
+time.sleep(2)
+move_many(lower_joint_down, 3)
+time.sleep(2)
+move_many(upper_joint_down, 3)
+time.sleep(2)
 
 
-#transitions of the right leg:
-    #move_poly(-60, -30, 3, 1)
-    #move_poly(40, 30, 3, 5)
-    #move_poly(30, 179, 3, 5) ##179 relaxed string 30 - broke cable
-    #move_poly(169, 179, 3, 5)
-    #move_poly(129, 119, 3, 2) ##tensioned position(almost maximum up) stays like that
-    #move_poly(159, 179, 3, 2)
-    
-    ##16jan:
-    #move_poly(-179, -10, 2, 4)
-    #move_poly(-10, -179, 2, 4)
-    #move_poly(179, 0, 2, 2)
-    #move_poly(0, 179, 2, 2)
-    #move_poly(-179, 0, 2, 3)
-    #move_poly(0, -179, 2, 3)
-    #move_poly(-120, -180, 2, 0)
-    #move_poly(-180, -120, 2, 0)
-    
-#     move_poly(-60, -120, .8, 0)
-#     move_poly(90, -100, .8, 3)
+##move_poly(179, 0, 3, 2)
+##time.sleep(1)
+##move_poly(0, 179, 3, 2)
+##move_poly(-179, 20, 3, 4) #with shifted ring
+##time.sleep(1)
+##move_poly(20, -179, 3, 4)
 
-#     move_poly(-100, 100, .8, 3)
-#     move_many(pos_poly6,.8)
-#     move_poly(100, -100, .8, 3)
-#     move_many(pos_poly5, .8)
-    
-#       move_poly(-140,-50,.8, 4)
-    
-    
-#for x in range (1):
-    #move_many(pos_poly6, 3)
-    #move_many(pos_poly, 1.5)
-    #move_many(pos_poly4, 1.5)
-    #move_many(pos_poly3, 1.5)
-#while 1:
-    
- #   move_poly(-120, -60, 1, 1)
-
-    # Change goal position
-
-"""
-# Clear syncread parameter storage
-groupSyncRead.clearParam()
-
-for x in range(ldxl):
-# Disable Dynamixel#1 Torque
-    dxl_comm_result, dxl_error = packetHandler.write1ByteTxRx(portHandler, DXL1_ID, ADDR_TORQUE_ENABLE, TORQUE_DISABLE)
-    if dxl_comm_result != COMM_SUCCESS:
-        print("%s" % packetHandler.getTxRxResult(dxl_comm_result))
-    elif dxl_error != 0:
-        print("%s" % packetHandler.getRxPacketError(dxl_error))
-'''
-# Disable Dynamixel#2 Torque
-dxl_comm_result, dxl_error = packetHandler.write1ByteTxRx(portHandler, DXL2_ID, ADDR_TORQUE_ENABLE, TORQUE_DISABLE)
-if dxl_comm_result != COMM_SUCCESS:
-    print("%s" % packetHandler.getTxRxResult(dxl_comm_result))
-elif dxl_error != 0:
-    print("%s" % packetHandler.getRxPacketError(dxl_error))'''
-"""
+#move_many(L_trans1, 2)
+#time.sleep(5)
+#move_many(wheel1, 2)
+#move_many(leg1, 2)
+#move_many(shldr1, 1)
+#move_many(fin, 0.5)
+#move_poly(-135, -120, 1, 1)
+#move_poly(-45, -60, 1, 0)
+#move_many(leg1, 2)
+#time.sleep(5)
+#move_many(wheel2, 2)
+#move(pos[1])
 # Close port
 portHandler.closePort()
